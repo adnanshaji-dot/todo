@@ -28,23 +28,21 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0b0c13; --surface:#161826; --surface2:#1b1e2f; --col:rgba(255,255,255,.028); --line:#262a3e;
-    --text:#eceef8; --muted:#969bb4; --muted2:#4d5270;
-    --accent:#8b7dff; --accent-soft:#25214d; --green:#2fd68a; --green-ink:#5ce8a6; --green-soft:#10301f;
-    --red:#ff6b6f; --red-soft:#3a1719;
-    --shadow-sm:0 1px 2px rgba(0,0,0,.3); --shadow:0 2px 4px rgba(0,0,0,.25),0 10px 26px rgba(0,0,0,.35);
-    --shadow-lg:0 24px 60px rgba(0,0,0,.6); --glow1:rgba(139,125,255,.16); --glow2:rgba(47,214,138,.08);
+    --bg:#000000; --surface:#0d0d0d; --surface2:#151515; --col:transparent; --line:#232323;
+    --text:#e9e4da; --muted:#908a80; --muted2:#4b4843;
+    --accent:#7c8aa8; --accent-soft:#191c23; --green:#5fbf8f; --green-ink:#86d6ac; --green-soft:#0f2119;
+    --red:#e0786f; --red-soft:#261311;
+    --shadow-sm:none; --shadow:none; --shadow-lg:0 24px 60px rgba(0,0,0,.8); --glow1:transparent; --glow2:transparent;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0b0c13; --surface:#161826; --surface2:#1b1e2f; --col:rgba(255,255,255,.028); --line:#262a3e;
-  --text:#eceef8; --muted:#969bb4; --muted2:#4d5270;
-  --accent:#8b7dff; --accent-soft:#25214d; --green:#2fd68a; --green-ink:#5ce8a6; --green-soft:#10301f;
-  --red:#ff6b6f; --red-soft:#3a1719;
-  --shadow-sm:0 1px 2px rgba(0,0,0,.3); --shadow:0 2px 4px rgba(0,0,0,.25),0 10px 26px rgba(0,0,0,.35);
-  --shadow-lg:0 24px 60px rgba(0,0,0,.6); --glow1:rgba(139,125,255,.16); --glow2:rgba(47,214,138,.08);
-  color-scheme:dark;
+  --bg:#000000; --surface:#0d0d0d; --surface2:#151515; --col:transparent; --line:#232323;
+    --text:#e9e4da; --muted:#908a80; --muted2:#4b4843;
+    --accent:#7c8aa8; --accent-soft:#191c23; --green:#5fbf8f; --green-ink:#86d6ac; --green-soft:#0f2119;
+    --red:#e0786f; --red-soft:#261311;
+    --shadow-sm:none; --shadow:none; --shadow-lg:0 24px 60px rgba(0,0,0,.8); --glow1:transparent; --glow2:transparent;
+    color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -123,10 +121,10 @@ button{cursor:pointer}
 .side-lists{display:none}
 main{flex:1;min-height:0;position:relative}
 
-/* ---------- desktop: controls in a left sidebar ---------- */
-@media (min-width:761px){
-  body{flex-direction:row}
-  .top{flex-direction:column;align-items:stretch;width:240px;flex:none;padding:20px 14px 18px;gap:16px;border-right:1px solid var(--line);background:color-mix(in srgb,var(--surface) 60%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow-y:auto}
+/* ---------- sidebar (computer: always shown; phone: slide-in menu) ---------- */
+.mbar,.nav-scrim{display:none}
+.top{flex-direction:column;align-items:stretch;width:240px;flex:none;padding:20px 14px 18px;gap:16px;border-right:1px solid var(--line);background:var(--surface);overflow-y:auto}
+@media (min-width:0px){
   .brand{padding:0 6px}
   .search{width:100%}
   .search input{width:100%}
@@ -142,6 +140,9 @@ main{flex:1;min-height:0;position:relative}
   .side-lists .lchip.on{background:var(--c);color:#fff;box-shadow:0 4px 14px color-mix(in srgb,var(--c) 30%,transparent)}
   .top-r{margin-top:auto;flex-wrap:wrap}
   .top-r .sync{flex:1 0 100%;justify-content:center}
+}
+@media (min-width:761px){
+  body{flex-direction:row}
   .chipbar{display:none!important}
   .subbar{padding:16px 22px 14px}
 }
@@ -408,22 +409,24 @@ code{font-family:ui-monospace,Consolas,monospace;font-size:12px;background:var(-
 
 /* ---------- mobile ---------- */
 @media (max-width:760px){
-  .top{padding:10px 16px 6px;padding-top:max(10px,env(safe-area-inset-top));gap:8px}
-  .brand{font-size:17px;margin-right:auto}
-  .tabs{display:none}
-  .search{width:38px;padding:0;justify-content:center;cursor:pointer}
-  .search input{width:0;padding:0}
-  .search.open{position:absolute;left:16px;right:16px;width:auto;z-index:6;padding:0 12px;justify-content:flex-start;box-shadow:var(--shadow)}
-  .search.open input{width:100%}
-  .sync{width:38px;padding:0;justify-content:center}
-  .sync span{display:none}
+  .top{position:fixed;top:0;bottom:0;left:0;z-index:70;width:min(300px,84vw);padding-top:max(20px,env(safe-area-inset-top));padding-bottom:max(18px,env(safe-area-inset-bottom));border-right:0;transform:translateX(-102%);transition:transform .3s cubic-bezier(.2,.9,.3,1)}
+  body.nav-open .top{transform:none;box-shadow:var(--shadow-lg)}
+  .nav-scrim{display:block;position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s}
+  body.nav-open .nav-scrim{opacity:1;pointer-events:auto}
+  .mbar{display:flex;align-items:center;gap:10px;padding:8px 12px 2px;padding-top:max(8px,env(safe-area-inset-top));font-size:17px;flex:none}
+  .mbar .logo{width:30px;height:30px;border-radius:9px}
+  .mbar .ic{width:22px;height:22px}
+  #mSync i{width:9px;height:9px;border-radius:50%;background:var(--muted2);display:block}
+  #mSync[data-s=synced] i{background:var(--green)}
+  #mSync[data-s=syncing] i{background:var(--accent);animation:blink 1s infinite}
+  #mSync[data-s=auth] i,#mSync[data-s=error] i{background:var(--amber)}
   .subbar{padding:4px 16px 12px;gap:10px}
   .chipbar{padding:0 16px 12px}
   .range{font-size:17px}
   .sub-r .toggle{font-size:12px}
   .stats{padding:3px 10px 3px 4px;font-size:11px}
   .ring-svg{width:28px;height:28px}
-  main{padding-bottom:calc(66px + env(safe-area-inset-bottom))}
+  main{padding-bottom:env(safe-area-inset-bottom)}
   .hscroll{padding:0 16px 14px;gap:10px;scroll-snap-type:x mandatory;scroll-padding:0 16px}
   .col{flex:0 0 min(86vw,380px);max-width:none}
   .view-lists .col{flex:0 0 calc(100vw - 32px);max-width:none}
@@ -440,17 +443,13 @@ code{font-family:ui-monospace,Consolas,monospace;font-size:12px;background:var(-
   .mdots i.doing{background:var(--green)}
   .mdots i.done{background:var(--green);opacity:.35}
   .mdots i.over{background:var(--red)}
-  .bnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
-  .bnav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted);padding:6px 0;border-radius:12px}
-  .bnav button .ic{width:21px;height:21px}
-  .bnav button.on{color:var(--accent)}
-  .fab{bottom:calc(80px + env(safe-area-inset-bottom));right:16px;width:56px;height:56px;border-radius:18px}
+  .fab{bottom:calc(20px + env(safe-area-inset-bottom));right:16px;width:56px;height:56px;border-radius:18px}
   .modal{left:0;right:0;top:auto;bottom:0;width:100%;max-height:94dvh;border-radius:24px 24px 0 0;transform:translateY(102%);opacity:1}
   .modal.open{transform:none}
   .modal .grab{display:block;width:40px;height:5px;border-radius:5px;background:var(--line);margin:10px auto 0;flex:none}
   .ed-head{padding-top:10px}
   .side,.side.left{width:100%;border-radius:0}
-  .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+  .toast{bottom:calc(88px + env(safe-area-inset-bottom))}
 }
 @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
 
@@ -482,8 +481,7 @@ body{background:var(--bg)}
 .add{border-style:solid;border-color:transparent;justify-content:flex-start;padding:9px 10px}
 .add:hover{border-color:transparent}
 .drop-line{box-shadow:none}
-@media (min-width:761px){
-  .top{background:var(--surface);backdrop-filter:none;-webkit-backdrop-filter:none}
+@media (min-width:0px){
   .side-lists .lchip.on{background:color-mix(in srgb,var(--c) 13%,transparent);color:var(--text)}
   .side-lists .lchip.on i{background:var(--c)}
   .side-lists .lchip.on em{background:var(--surface2);color:var(--muted)}
@@ -515,18 +513,19 @@ body{background:var(--bg)}
     <button class="icon-btn" id="btnSettings" title="Settings" aria-label="Settings" data-icon="sliders"></button>
   </div>
 </header>
+<div class="mbar">
+  <button class="icon-btn ghost" id="btnMenu" aria-label="Open menu" data-icon="menu"></button>
+  <img class="logo" src="icons/icon-192.png" alt="" width="30" height="30"><b>Tickboard</b>
+  <span class="spacer"></span>
+  <button class="icon-btn ghost" id="mSync" data-s="local" aria-label="Sync status"><i></i></button>
+</div>
+<div class="nav-scrim" id="navScrim"></div>
 <div class="content">
 <div class="subbar" id="subbar"></div>
 <div class="chipbar" id="chipbar" aria-label="Filter by list" hidden></div>
 <main><div id="view" class="view"></div></main>
 </div>
 
-<nav class="bnav" id="bnav" aria-label="Views">
-  <button data-view="week" data-icon="week"><span>Week</span></button>
-  <button data-view="board" data-icon="board"><span>Board</span></button>
-  <button data-view="month" data-icon="month"><span>Month</span></button>
-  <button data-view="lists" data-icon="listc"><span>Lists</span></button>
-</nav>
 <button class="fab" id="fab" aria-label="New task" title="New task (N)" data-icon="plus"></button>
 
 <div class="scrim" id="scrim"></div>
@@ -716,6 +715,7 @@ const IC = {
   download: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
   cloud: '<path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 9.2 4.5 4.5 0 0 0 7 18z"/>',
   moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
 };
 const icon = n => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n] || ''}</svg>`;
@@ -925,7 +925,7 @@ const G = {
     if (this.client && this.cid === P.clientId) return true;
     this.cid = P.clientId;
     this.client = google.accounts.oauth2.initTokenClient({
-      client_id: P.clientId, scope: SCOPE_TASKS + ' ' + SCOPE_CAL,
+      client_id: P.clientId, scope: SCOPE_TASKS + ' ' + SCOPE_CAL, ...(P.gEmail ? { login_hint: P.gEmail } : {}),
       callback: r => this.onToken(r),
       error_callback: e => { setSync(P.mode === 'google' ? 'auth' : 'local'); toast(e && e.type === 'popup_closed' ? 'Google sign-in was closed' : 'Google sign-in failed'); },
     });
@@ -944,7 +944,10 @@ const G = {
     this.token = r.access_token;
     this.exp = Date.now() + (Number(r.expires_in || 3600) - 60) * 1000;
     this.calOK = google.accounts.oauth2.hasGrantedAnyScope(r, SCOPE_CAL);
-    try { sessionStorage.setItem('tb.tok', JSON.stringify({ t: this.token, e: this.exp, c: this.calOK })); } catch {}
+    try { localStorage.setItem('tb.tok', JSON.stringify({ t: this.token, e: this.exp, c: this.calOK })); } catch {}
+    if (this.calOK && !P.gEmail) {
+      this.req('GET', CAL + 'calendars/primary').then(c => { if (c && c.id && c.id.includes('@')) { P.gEmail = c.id; savePrefs(); this.client = null; this.init(); } }).catch(() => {});
+    }
     if (P.mode !== 'google') {
       const local = D;
       const n = local.tasks.filter(t => !cleared.has(t.id)).length;
@@ -966,7 +969,7 @@ const G = {
   },
   restore() {
     try {
-      const s = JSON.parse(sessionStorage.getItem('tb.tok') || 'null');
+      const s = JSON.parse(localStorage.getItem('tb.tok') || sessionStorage.getItem('tb.tok') || 'null');
       if (s && s.e > Date.now()) { this.token = s.t; this.exp = s.e; this.calOK = s.c; return true; }
     } catch {}
     return false;
@@ -987,7 +990,7 @@ const G = {
   disconnect() {
     try { if (this.token && this.lib()) google.accounts.oauth2.revoke(this.token, () => {}); } catch {}
     this.token = ''; this.exp = 0;
-    try { sessionStorage.removeItem('tb.tok'); } catch {}
+    try { localStorage.removeItem('tb.tok'); sessionStorage.removeItem('tb.tok'); } catch {}
   },
 };
 
@@ -1547,8 +1550,8 @@ let syncState = 'local';
 function setSync(s) {
   syncState = s;
   const el = $('#sync');
-  el.dataset.s = s;
-  const txt = { local: 'On this device', synced: 'Synced', syncing: 'Syncing…', auth: 'Reconnect', error: 'Sync error' }[s];
+  el.dataset.s = s; $('#mSync').dataset.s = s;
+  const txt = { local: 'On this device', synced: 'Synced', syncing: 'Syncing…', auth: 'Tap to resume sync', error: 'Sync error' }[s];
   el.querySelector('span').textContent = txt;
   el.title = { local: 'Tasks are stored in this browser — click to connect Google', synced: 'Synced with Google — click to refresh', syncing: 'Syncing with Google…', auth: 'Google session expired — click to reconnect', error: 'Sync error — click to retry' }[s];
   if ($('#settings').classList.contains('open')) fillSettings();
@@ -1715,7 +1718,7 @@ function applyTheme() {
   const dark = effectiveTheme() === 'dark', b = $('#btnTheme');
   b.innerHTML = icon(dark ? 'sun' : 'moon');
   b.title = dark ? 'Switch to light (white) mode' : 'Switch to dark mode';
-  $('meta[name="theme-color"]').content = dark ? '#0b0c13' : '#f3f4fa';
+  $('meta[name="theme-color"]').content = dark ? '#000000' : '#f3f4fa';
 }
 function renderChips() {
   const bar = $('#chipbar'), side = $('#sideLists');
@@ -1952,6 +1955,12 @@ function bind() {
   });
   $('#btnSettings').addEventListener('click', () => openSheet('#settings'));
   $('#btnLists').addEventListener('click', () => openSheet('#listsPanel'));
+  const closeNav = () => document.body.classList.remove('nav-open');
+  $('#btnMenu').addEventListener('click', () => document.body.classList.add('nav-open'));
+  $('#navScrim').addEventListener('click', closeNav);
+  $('#mSync').addEventListener('click', () => $('#sync').click());
+  ['#tabs', '#sideLists', '#btnSettings', '#btnLists'].forEach(sel => $(sel).addEventListener('click', e => { if (e.target.closest('button')) closeNav(); }));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
   $('#btnTheme').addEventListener('click', () => { P.theme = effectiveTheme() === 'dark' ? 'light' : 'dark'; savePrefs(); applyTheme(); fillSettings(); });
   ['#chipbar', '#sideLists'].forEach(sel => $(sel).addEventListener('click', e => {
     const b = e.target.closest('[data-focus]'); if (!b) return;
@@ -2102,7 +2111,7 @@ document.addEventListener('pointerdown', () => {
   if (G.token && G.exp - Date.now() > 5 * 60000) return;
   if (Date.now() - (G.lastAsk || 0) < 30000) return;
   G.lastAsk = Date.now();
-  G.client.requestAccessToken({ prompt: '' });
+  G.client.requestAccessToken({ prompt: '', ...(P.gEmail ? { login_hint: P.gEmail } : {}) });
 }, true);
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
   navigator.serviceWorker.register('sw.js').catch(() => {});

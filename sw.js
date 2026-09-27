@@ -1,7 +1,7 @@
 // Tickboard service worker: makes the app installable and opens it offline.
 // Network first (so updates show up straight away), cached copy when offline.
 // Google API calls are never cached.
-const CACHE = 'tickboard-v1';
+const CACHE = 'tickboard-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
